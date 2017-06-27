@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-md-6 col-md-offse-3">
+    <%= form_for(:new_reservation_url) do |f| %>
+      <%= f.label "Select Room Category" %>
+      <%= select("reservation", "category_id", Roomcategory.all.collect {|r| [ r.name, r.id ] }, { include_blank: true }) %>
+      <%= f.label "Select Rooms" %>
+      <select name="reservation[room_id]" id="rooms">
+          <% Room.all.each do |room| %>
+              <option value="<%= room.id %>"><%= room.number %></option>
+          <% end %>
+      </select>
+      <div class="row">
+        <div class='col-sm-6'>
+        <%= text_field("reservation","date_in" ,class: 'form-control', id: 'datetimepicker4') %>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker4').datetimepicker();
+            });
+        </script>
+      </div>
+      <div class="row">
+        <div class='col-sm-6'>
+        <%= text_field("reservation","date_out",class: 'form-control', id: 'datetimepicker5' ) %>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker5').datetimepicker();
+            });
+        </script>
+      </div>
+
+      <button id = "book_room" class="btn btn-primary">Book Room</button>
+      <%= f.submit "Book Room", class: "btn btn-primary", style: "display:none;" %>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $("#reservation_category_id").change(function(){
+    var e = document.getElementById("reservation_category_id");
+    var cat_id = e.options[e.selectedIndex].value;
+    $.ajax({
+      url: "<%= get_rooms_for_category_path %>",
+      data: {category: cat_id },
+      success: function(data){
+        $("#rooms").html("");
+        console.log(data);
+        for(var i = 0; i < data.length; i++){
+          $("#rooms").append("<option value='"+data[i].id+"'>"+data[i].number+"</option>");
+        }
+      }
+    })
+  });
+</script>

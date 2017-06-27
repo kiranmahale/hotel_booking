@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  number: MyString
+  is_booked: false
+  category: one
+
+two:
+  number: MyString
+  is_booked: false
+  category: two
